@@ -2,10 +2,17 @@ doctype html
 html(lang='en')
   head
     meta(charset='utf-8')
-    title Client Template
+    title Checkers
     link(rel='stylesheet', href='./css/app.css')
   body
-    h1 Client Template
+    h1 Checkers
 
-    script(src='./js/vendor/jquery-2.1.0.js')
-    script(src='./js/source/main.js')
+    table#board
+      tbody
+        -for(var i = 0; i < 8; i++)
+          tr
+            -for(var j = 0; j < 8; j++)
+              td(data-x=i, data-y=j)
+
+  script(src='./js/vendor/jquery-2.1.0.js')
+  script(src='./js/source/main.js')

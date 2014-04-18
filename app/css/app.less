@@ -3,7 +3,7 @@ body {
 }
 
 #board {
-  border: 1px solid black;
+
   width: 550px;
   height: 550px;
   margin: auto;
@@ -13,7 +13,6 @@ td {
   background-color: red;
   width: 40px;
   height: 40px;
-  border: 1px solid black;
 }
 
 .validSpace {
@@ -27,11 +26,23 @@ td {
 }
 
 .player1 {
-background-image: url('../media/blue.png');
-background-size: 100%;
-background-repeat: no-repeat;
+  background-image: url('../media/blue.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.player1.king {
+  background-image: url('../media/blueking.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.player2.king {
+  background-image: url('../media/redking.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
 }
 
 .selected {
-  border: 3px solid yellow;
+  background-color: yellow;
 }

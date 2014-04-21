@@ -15,14 +15,14 @@
         if (($('.selected').hasClass('player1') && $(this).data('y') === 0) ||
           ($('.selected').hasClass('player2') && $(this).data('y') === 7)){
           $(this).addClass('king');
-        } 
+        }
         move(this);
       }
     }
   }
 
   function captured(x, y){
-    $('td[data-x='+x+'][data-y='+y+']').removeClass('piece player1 player2');
+    $('td[data-x='+x+'][data-y='+y+']').removeClass('piece player1 player2 king');
   }
 
   function isDiag(x,y){
@@ -43,17 +43,81 @@
       var y2 = currXY[1]-(offY/2);
       if($('.selected').hasClass('player1')) {
         if ((offY > 0 || isKing()) && isOppPiece(x2,y2,'player2')){
+          isDoubleJump(x, y, offY);
           captured(x2, y2);
           return true;
         }
       } else {
         if((offY < 0 || isKing()) && isOppPiece(x2,y2,'player1')){
-        captured(x2, y2);
+          isDoubleJump(x, y, offY);
+          captured(x2, y2);
         return true;
         }
       }
     }
     return false;
+  }
+
+  function isDoubleJump(x, y, offY){
+    var topLeft = [x-1, y-1];
+    var topRight = [x+1, y-1];
+    var bottomLeft = [x-1, y+1];
+    var bottomRight = [x+1, y+1];
+
+    if($('.selected').hasClass('player1')){
+      if ((offY > 0 || isKing()) && isOppPiece(topLeft[0], topLeft[1], 'player2') && !$('td[data-x='+(x-2)+'][data-y='+(y-2)+']').hasClass('piece')){
+        captured(topLeft[0], topLeft[1]);
+        move('td[data-x='+ (x-2) +'][data-y='+ (y-2) +']');
+        $('td[data-x='+x+'][data-y='+y+']').removeClass('player2 piece king current selected');
+        if (y-2 === 0){
+          $('td[data-x='+(x-2)+'][data-y='+(y-2)+']').addClass('king');
+        }
+      } else if ((offY > 0 || isKing()) && isOppPiece(topRight[0], topRight[1], 'player2') && !$('td[data-x='+(x+2)+'][data-y='+(y-2)+']').hasClass('piece')){
+        captured(topRight[0], topRight[1]);
+        move('td[data-x='+ (x+2) +'][data-y='+ (y-2) +']');
+        $('td[data-x='+x+'][data-y='+y+']').removeClass('player2 piece king current selected');
+        if (y-2 === 0){
+          $('td[data-x='+(x+2)+'][data-y='+(y-2)+']').addClass('king');
+        }
+      } else if (isKing() && isOppPiece(bottomLeft[0], bottomLeft[1], 'player2') && !$('td[data-x='+(x-2)+'][data-y='+(y+2)+']').hasClass('piece')){
+          captured(bottomLeft[0], bottomLeft[1]);
+          move('td[data-x='+ (x-2) +'][data-y='+ (y+2) +']');
+          $('td[data-x='+x+'][data-y='+y+']').removeClass('player2 piece king current selected');
+      } else if (isKing() && isOppPiece(bottomRight[0], bottomRight[1], 'player2') && !$('td[data-x='+(x+2)+'][data-y='+(y+2)+']').hasClass('piece')){
+          captured(bottomRight[0], bottomRight[1]);
+          move('td[data-x='+ (x+2) +'][data-y='+ (y+2) +']');
+          $('td[data-x='+x+'][data-y='+y+']').removeClass('player2 piece king current selected');
+      }
+    }
+
+    if($('.selected').hasClass('player2')){
+      if (isKing() && isOppPiece(topLeft[0], topLeft[1], 'player1') && !$('td[data-x='+(x-2)+'][data-y='+(y-2)+']').hasClass('piece')){
+        captured(topLeft[0], topLeft[1]);
+        move('td[data-x='+ (x-2) +'][data-y='+ (y-2) +']');
+        $('td[data-x='+x+'][data-y='+y+']').removeClass('player1 piece king current selected');
+      } else if (isKing() && isOppPiece(topRight[0], topRight[1], 'player1') && !$('td[data-x='+(x+2)+'][data-y='+(y-2)+']').hasClass('piece')){
+        captured(topRight[0], topRight[1]);
+        move('td[data-x='+ (x+2) +'][data-y='+ (y-2) +']');
+        $('td[data-x='+x+'][data-y='+y+']').removeClass('player1 piece king current selected');
+      } else if ((offY < 0 || isKing()) && isOppPiece(bottomLeft[0], bottomLeft[1], 'player1') && !$('td[data-x='+(x-2)+'][data-y='+(y+2)+']').hasClass('piece')){
+          captured(bottomLeft[0], bottomLeft[1]);
+          move('td[data-x='+ (x-2) +'][data-y='+ (y+2) +']');
+          $('td[data-x='+x+'][data-y='+y+']').removeClass('player1 piece king current selected');
+          if (y+2 === 7){
+            $('td[data-x='+(x-2)+'][data-y='+(y+2)+']').addClass('king');
+          }
+      } else if ((offY < 0 || isKing()) && isOppPiece(bottomRight[0], bottomRight[1], 'player1') && !$('td[data-x='+(x+2)+'][data-y='+(y+2)+']').hasClass('piece')){
+          captured(bottomRight[0], bottomRight[1]);
+          move('td[data-x='+ (x+2) +'][data-y='+ (y+2) +']');
+          $('td[data-x='+x+'][data-y='+y+']').removeClass('player1 piece king current selected');
+        if (y+2 === 7){
+          $('td[data-x='+(x+2)+'][data-y='+(y+2)+']').addClass('king');
+        }
+      }
+    }
+
+
+
   }
 
   function isKing(){
@@ -76,13 +140,13 @@
       $(current).addClass('king');
     }
     if($('.selected').hasClass('player1')){
+      $('.selected').removeClass('player1 piece king current selected');
       $(current).addClass('player1 piece');
-      $('.selected').removeClass('player1 piece selected king current');
       $('.player1').removeClass('current');
       $('.player2').addClass('current');
-    } else {
+    } else if($('.selected').hasClass('player2')) {
+      $('.selected').removeClass('player2 piece king current selected');
       $(current).addClass('player2 piece');
-      $('.selected').removeClass('player2 piece selected king current');
       $('.player2').removeClass('current');
       $('.player1').addClass('current');
     }

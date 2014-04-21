@@ -1,0 +1,39 @@
+body {
+  margin: auto;
+}
+#board {
+  width: 550px;
+  height: 550px;
+  margin: auto;
+}
+td {
+  background-color: red;
+  width: 40px;
+  height: 40px;
+}
+.validSpace {
+  background-color: black;
+}
+.player2 {
+  background-image: url('../media/red.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.player1 {
+  background-image: url('../media/blue.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.player1.king {
+  background-image: url('../media/blueking.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.player2.king {
+  background-image: url('../media/redking.png');
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+.selected {
+  background-color: yellow;
+}
